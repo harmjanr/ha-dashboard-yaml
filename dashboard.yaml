@@ -1,0 +1,384 @@
+kiosk_mode:
+  hide_sidebar: true
+  hide_overflow: true
+  hide_search: true
+  hide_assistant: true
+views:
+  - cards: []
+    type: sections
+    icon: mdi:home-outline
+    theme: ios-dark-mode-blue-red-alternative
+    sections:
+      - type: grid
+        cards:
+          - type: custom:hourly-weather
+            entity: weather.forecast_home
+            icons: true
+            show_wind: speed
+            show_date: 'false'
+            show_precipitation_amounts: true
+            show_precipitation_probability: true
+            num_segments: '8'
+            name: ''
+          - show_name: true
+            show_icon: true
+            show_state: true
+            type: glance
+            entities:
+              - entity: sensor.cyclus_gft
+                name: GFT
+              - entity: sensor.cyclus_papier
+                name: Papier
+              - entity: sensor.cyclus_restafval
+                name: Rest
+          - show_name: true
+            show_icon: true
+            show_state: false
+            type: glance
+            entities:
+              - entity: binary_sensor.wc_motion
+                name: WC
+              - entity: binary_sensor.hal_motion
+                name: Hal
+              - entity: binary_sensor.hal_eerste_verdieping_motion
+                name: Hal 1e
+              - entity: binary_sensor.badkamer_occupancy
+                name: Badkamer
+              - entity: binary_sensor.hal_zolder_motion
+                name: Zolder
+      - type: grid
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: entity
+                name: Datum
+                entity: sensor.date
+              - type: entity
+                name: Tijd
+                entity: sensor.time
+            grid_options:
+              columns: 12
+              rows: 2
+          - type: entity
+            entity: sensor.train
+            visibility:
+              - condition: state
+                entity: sensor.train
+                state_not: unknown
+          - type: entity
+            entity: sensor.waze_travel_time
+            name: Naar P+R
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: navigate
+              navigation_path: '#popup-scenes'
+            name: Scenes
+            icon: mdi:palette
+            icon_height: 40px
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: navigate
+              navigation_path: '#popup-wifi'
+            name: Wifi
+            icon: mdi:wifi
+            icon_height: 40px
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: navigate
+              navigation_path: '#popup-awning'
+            name: Zonnewering
+            icon: mdi:weather-sunny-off
+            icon_height: 40px
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: navigate
+              navigation_path: '#popup-lights'
+            name: Lampen
+            icon: mdi:lightbulb-on-10
+            icon_height: 40px
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: navigate
+              navigation_path: '#popup-media'
+            name: Muziek
+            icon: mdi:volume-high
+            icon_height: 40px
+          - type: vertical-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: pop-up
+                hash: '#popup-scenes'
+                close_on_click: true
+              - type: grid
+                columns: 2
+                cards:
+                  - show_name: true
+                    show_icon: true
+                    type: button
+                    tap_action:
+                      action: toggle
+                    entity: scene.bedtijd
+                    icon: mdi:chat-sleep-outline
+                  - show_name: true
+                    show_icon: true
+                    type: button
+                    tap_action:
+                      action: toggle
+                    entity: scene.gezellig
+                    icon: mdi:lamp-outline
+                  - show_name: true
+                    show_icon: true
+                    type: button
+                    tap_action:
+                      action: toggle
+                    entity: scene.doei
+                    icon: mdi:hand-wave-outline
+                  - show_name: true
+                    show_icon: true
+                    type: button
+                    tap_action:
+                      action: toggle
+                    entity: scene.film
+                    icon: mdi:movie-open-outline
+          - type: vertical-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: pop-up
+                hash: '#popup-wifi'
+                close_on_click: true
+              - type: horizontal-stack
+                cards:
+                  - type: custom:mushroom-template-card
+                    primary: My-guest-wifi
+                    secondary: 'Wachtwoord: goodtry!'
+                    icon: mdi:wifi
+                    icon_color: blue
+                    badge_icon: ''
+                    layout: vertical
+                    fill_container: true
+                    multiline_secondary: false
+                    tap_action:
+                      action: none
+                    hold_action:
+                      action: none
+                    double_tap_action:
+                      action: none
+                  - type: picture
+                    image: <path-to-qr>
+                    tap_action:
+                      action: none
+                    hold_action:
+                      action: none
+          - type: vertical-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: pop-up
+                hash: '#popup-awning'
+              - type: tile
+                entity: cover.woonkamer_left
+                name: Gordijnen
+                features:
+                  - type: cover-open-close
+              - type: tile
+                entity: cover.lichtstraat
+                features:
+                  - type: cover-open-close
+              - type: tile
+                entity: cover.zonnescherm
+                features:
+                  - type: cover-open-close
+          - type: vertical-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: pop-up
+                hash: '#popup-lights'
+                close_on_click: true
+              - type: horizontal-stack
+                cards:
+                  - type: entities
+                    title: Woonkamer
+                    entities:
+                      - entity: light.eettafel_lamp
+                      - entity: light.woonkamer_glaslamp
+                      - entity: light.woonkamer_ledstrip
+                      - entity: light.speelhoek_spots
+                      - entity: light.staande_lamp
+                      - entity: switch.kerstboom
+                    show_header_toggle: false
+                  - type: entities
+                    title: Buiten
+                    entities:
+                      - entity: light.buitenlamp_light
+                      - entity: switch.kerstlampjes_voor
+                    show_header_toggle: false
+          - type: vertical-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: pop-up
+                hash: '#popup-media'
+                close_on_click: true
+              - type: custom:mini-media-player
+                entity: media_player.woonkamer_sonos
+              - type: custom:mini-media-player
+                entity: media_player.keuken
+    max_columns: 4
+  - type: sections
+    theme: ios-dark-mode-blue-red-alternative
+    max_columns: 2
+    column_num: 2
+    column_width:
+      - 50%
+      - 50%
+    icon: mdi:calendar-outline
+    path: ''
+    sections:
+      - type: grid
+        cards:
+          - type: custom:atomic-calendar-revive
+            name: 'Name1'
+            enableModeChange: true
+            entities:
+              - entity: update.atomic_calendar_revive_update
+                icon: ''
+              - entity: calendar.mailaddress1
+                name: Mailaddress1
+              - entity: calendar.voetbal_nl_persoonlijk
+                name: Voetbal.nl - persoonlijk
+            card_mod:
+              style: |
+                ha-card {
+              transform: scale(2.2); }
+      - type: grid
+        cards:
+          - type: custom:atomic-calendar-revive
+            name: Name1
+            enableModeChange: true
+            entities:
+              - entity: update.atomic_calendar_revive_update
+                icon: ''
+              - entity: calendar.mailaddress2
+                name: Mailaddress2
+    cards: []
+  - type: sections
+    theme: ios-dark-mode-blue-red-alternative
+    max_columns: 4
+    icon: mdi:bed-outline
+    path: ''
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: Zolder
+            heading_style: title
+          - type: entities
+            entities:
+              - entity: climate.slaapkamer1
+                name: Klimaat
+            title: Slaapkamer 1
+          - type: entities
+            entities:
+              - entity: climate.werkkamer
+                name: Klimaat
+              - entity: media_player.kantoor
+            title: Kantoor
+          - type: entities
+            entities:
+              - entity: light.hal_zolder_lamp
+                name: Lamp
+              - entity: binary_sensor.hal_zolder_motion
+                name: Beweging
+            title: Hal zolder
+      - type: grid
+        cards:
+          - type: heading
+            heading: Eerste verdieping
+            heading_style: title
+          - type: entities
+            entities:
+              - entity: climate.slaapkamer_2
+                name: Klimaat
+              - entity: light.nijntjelamp
+            title: Slaapkamer 2
+          - type: entities
+            entities:
+              - entity: light.leeuwlamp_light
+            title: Babykamer
+          - type: entities
+            entities:
+              - entity: light.hal_eerste_verdieping_plafondlamp
+                name: Lamp
+              - entity: binary_sensor.hal_eerste_verdieping_motion
+                name: Beweging
+              - entity: binary_sensor.hal_eerste_verdieping_motion2
+                name: Beweging
+            title: Hal eerste verdieping
+      - type: grid
+        cards:
+          - type: heading
+            heading: Overig
+            heading_style: title
+          - type: entities
+            entities:
+              - entity: light.buitenlamp_light
+              - entity: switch.kerstlampjes_voor
+            title: Buiten
+    cards: []
+  - type: sections
+    max_columns: 4
+    icon: mdi:lightning-bolt-outline
+    path: ''
+    sections:
+      - type: grid
+        cards:
+          - type: energy-usage-graph
+            title: Energieverbruik
+            grid_options:
+              columns: full
+          - type: energy-solar-graph
+            title: Opbrengst panelen
+            grid_options:
+              columns: full
+        column_span: 2
+      - type: grid
+        cards:
+          - type: energy-date-selection
+          - type: energy-distribution
+            link_dashboard: false
+    theme: ios-dark-mode-blue-red-alternative
+    cards: []
+  - type: sections
+    max_columns: 4
+    icon: mdi:dev-to
+    path: ''
+    sections:
+      - type: grid
+        cards:
+          - type: custom:restriction-card
+            restrictions:
+              pin:
+                code: 1234
+            card:
+              show_name: true
+              show_icon: true
+              type: button
+              tap_action:
+                action: call-service
+                service: shell_command.shutdown_pi
+              name: Dashboard uit
+              icon: mdi:power
+              icon_height: 50px
+          - graph: line
+            type: sensor
+            entity: sensor.dashboard_pi_temperature
+            detail: 1
+            name: Pi Temperatuur
